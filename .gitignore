@@ -26,4 +26,5 @@ build/Release
 node_modules
 
 # VS Code
+.vscode
 jsconfig.json

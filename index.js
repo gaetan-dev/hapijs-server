@@ -12,7 +12,7 @@ const server = new Hapi.Server(options)
 const connection = { host: constants.application['host'], port: constants.application['port'] }
 server.connection(connection)
 
-// Dynamically adds all the routes (end-points) to the server instance. The routes are stored in the src/routes folder.
+// Dynamically adds all the routes (end-points) to the server instance.
 for (var route in routes) {
 	server.route(routes[route])
 }

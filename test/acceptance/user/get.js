@@ -25,9 +25,13 @@ describe('User GET methods', function () {
             url: 'http://localhost:8080/user/1',
         }
 
-        it('should return { id: 1, email: "aaa@mail.com" }', function (done) {
+        it('should return { id: 1, email: "aaa@mail.com", password:"123456" }', function (done) {
             server.inject(request, function (res) {
-                res.payload.should.be.eql({ id: 1, email: 'aaa@mail.com' })
+                res.payload.should.be.eql(JSON.stringify({ 
+                    id: '1', 
+                    email: 'aaa@mail.com',
+                    password: '123456'
+                }))
                 done()
             })
         })
