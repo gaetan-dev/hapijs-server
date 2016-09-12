@@ -4,6 +4,8 @@ const Hapi = require('hapi')
 const _ = require('underscore')
 const constants = require('src/config/constants')
 const routes = require('src/routes')
+const good = require('src/plugins/good')
+const plugins = require('src/plugins')
 
 // Creates server instance.
 const options = { debug: { request: [ 'info', 'error' ] } }
@@ -28,14 +30,28 @@ server.ext('onRequest', (request, reply) => {
     reply.continue()
 })
 
-// Starts the hapi.js server.
-if (constants.env !== 'test') {
-	server.start((err) => {
-        if (err)
-            throw err
-    })
+// Log all errors caught by Hapi
+server.on('request-internal', (req, event, tags) => {
+    if (tags.error)
+        server.log(['error'], event.data)
+});
 
-	console.log(`Server running at: ${server.info.uri}`)
-}
+// Plugins
+server.register(plugins, (err) => {
+    if (err)
+        return server.log(['error'], 'Failed to load a plugin:', err)
+        
+    // Starts the hapi.js server.
+    if (constants.env !== 'test') {
+        server.start((err) => {
+            if (err) {
+                server.log(['error'], err)
+                throw err
+            }
+        })
+
+        server.log(['debug'], `Server running at: ${server.info.uri}`)
+    }
+})
 
 module.exports = server

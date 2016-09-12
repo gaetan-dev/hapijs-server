@@ -179,6 +179,24 @@ We are using `Joi` module. As described in [its repository](https://github.com/s
 
 Every request we receive in our end-points is validated using `Joi`. So every resource have a `ResourceValidate` module (look at `src/components/user/user-validate.js` which describes a validation schema for every route/method/end-point.
 
+## Logs
+
+[**good**](https://github.com/hapijs/good) is a hapi plugin to monitor and report on a variety of hapi server events as well as ops information from the host machine. It listens for events emitted by hapi server instances and pushes standardized events to a collection of streams.
+
+We distinguish three type of logs; ops logs, debug logs and error logs wich are archived in `/log`. 
+
+To cath the log errors issued by Hapi:
+
+```javascript
+server.on('request-internal', (req, event, tags) => {
+    if (tags.error)
+        server.log(['error'], event.data)
+});
+```
+
+## Plugins
+
+
 ## References
 * https://gist.github.com/agendor/9922151
 * https://github.com/agendor/sample-hapi-rest-api
