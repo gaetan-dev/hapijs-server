@@ -1,6 +1,7 @@
-'use strict'
+"use strict";
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
+
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
   		env : {
@@ -10,13 +11,7 @@ module.exports = function (grunt) {
   		},
 		concurrent: {
 			dev: {
-				tasks: ['nodemon', 'node-inspector', 'watch:dev'],
-				options: {
-					logConcurrentOutput: true
-				}
-			},
-			test: {
-				tasks: ['nodemon', 'watch:test', 'mochaTest'],
+				tasks: ['nodemon', 'node-inspector', 'watch', 'mochaTest'],
 				options: {
 					logConcurrentOutput: true
 				}
@@ -44,21 +39,13 @@ module.exports = function (grunt) {
 			}
 		},
 		watch: {
-			dev: {
-				files: ['index.js', 'src/**/*.js'],
-				// tasks: ['jshint:with_overrides', 'mochaTest'],
-				tasks: ['jshint:src'],
-				options: {
-					livereload: true
-				}
-			},
-			test: {
-				files: ['index.js', 'src/**/*.js', 'test/**/*.js'],
+			server: {
+				files: ['**/*.js', '!node_modules/**/*.js', '!coverage.html'],
 				tasks: ['jshint:with_overrides', 'mochaTest'],
 				options: {
 					livereload: true
 				}
-			}
+			} 
 		},
 		mochaTest: {
 			test: {
@@ -66,7 +53,7 @@ module.exports = function (grunt) {
 					reporter: 'min',
 					should: require('should')
 				},
-				src: ['test/**/*.js']
+				src: ['test/unit/**/*.js', 'test/acceptance/**/*.js']
 			},
 			coverage: {
 				options: {
@@ -87,7 +74,20 @@ module.exports = function (grunt) {
 			}
 		},
 		jshint: { //docs: http://www.jshint.com/docs/options/
-			src: ['src/**/*.js', '!node_modules/**/*.js', '!coverage.html'],
+			src: ['**/*.js', '!node_modules/**/*.js', '!coverage.html'],
+			options: {
+				node: true,
+				newcap: true,
+				strict: true,
+				laxcomma: true, 
+				noarg: true,
+				noempty: true,
+				undef: true,
+				maxdepth: 2,
+				// sub: true,
+				asi: true,
+				esversion: 6
+			},
 			with_overrides: {
 				options: {
 					expr: true,
@@ -105,32 +105,18 @@ module.exports = function (grunt) {
 				files: {
 					src: ['test/**/*.js']
 				},
-			},
-			options: {
-				node: true,
-				newcap: true,
-				strict: true,
-				laxcomma: true, 
-				noarg: true,
-				noempty: true,
-				undef: true,
-				maxdepth: 2,
-				// maxlen: 100,
-				sub: true,
-				asi: true,
-				esversion: 6
 			}
 		}
-	})
+	});
 
-	grunt.loadNpmTasks('grunt-concurrent')
-	grunt.loadNpmTasks('grunt-nodemon')
-	grunt.loadNpmTasks('grunt-node-inspector')
-	grunt.loadNpmTasks('grunt-contrib-watch')
-	grunt.loadNpmTasks('grunt-contrib-jshint')
-	grunt.loadNpmTasks('grunt-mocha-test')
-	grunt.loadNpmTasks('grunt-env')
+	grunt.loadNpmTasks('grunt-concurrent');
+	grunt.loadNpmTasks('grunt-nodemon');
+	grunt.loadNpmTasks('grunt-node-inspector');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-mocha-test');
+	grunt.loadNpmTasks('grunt-env');
 
-	grunt.registerTask('default', ['env:dev', 'concurrent:dev'])
-	grunt.registerTask('test', ['env:dev', 'concurrent:test'])
-}
+	grunt.registerTask('default', ['env:dev', 'concurrent:dev']);
+
+};
