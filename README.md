@@ -1,7 +1,7 @@
-#Hapi.js Starter
+# Hapi.js Starter
 ---
 
-##Folder and file structure
+## Folder and file structure
 
 To begin with, the important parts of the structure for now are:
 
